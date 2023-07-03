@@ -1,3 +1,5 @@
+import os
+
 from langchain import OpenAI
 
 
@@ -19,17 +21,10 @@ class PromptTemplate:
         return f"format:: header: {self.template.header}, footer: {self.template.footer}, body: {self.template.body}," \
                f"context: {self.prompt_context}"
 
-    # def _include_latest_news(self):
-    #     """
-    #     This includes latest new in the brand industry
-    #     :return: str
-    #     """
-    #     return '' if False else f'Whats the latest news on {self.brand.business.industry}'
-
 
 class OpenAIPromptEngine:
     def __init__(self, template: PromptTemplate):
-        self.llm = OpenAI(temperature=0.9, openai_api_key='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')
+        self.llm = OpenAI(temperature=0.9, openai_api_key=os.environ['open_api_key'])
         self.template = template
 
     @property
