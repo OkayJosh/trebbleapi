@@ -1,3 +1,4 @@
+import uuid as uuid
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
@@ -8,6 +9,7 @@ def brand_directory_path(instance, filename):
 
 
 class Brand(TimeStampedModel):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=255, blank=True, null=True)
     logo = models.FileField(upload_to=brand_directory_path)
     description = models.CharField(max_length=255, blank=True, null=True)
@@ -30,27 +32,7 @@ class BrandPostTemplate(TimeStampedModel):
         topic_id (Foreign Key referencing the Post Topic table)
 
     """
-    name = models.CharField(max_length=255, blank=True, null=True)
-    brand = models.ForeignKey('Brand', on_delete=models.SET_NULL, blank=True,
-                              null=True, related_name='brand_post_templates')
-    header = models.CharField(max_length=255, blank=True, null=True)
-    body = models.TextField()
-    footer = models.CharField(max_length=255, blank=True, null=True)
-
-
-class BrandPostTemplate(TimeStampedModel):
-    """
-    This is the template the Brand wants his post in or fashioned against
-        Post Template Table:
-        brand_id (Foreign Key referencing the Brand table)
-        date
-        head
-        body
-        close
-        character_id (Foreign Key referencing the Character table)
-        topic_id (Foreign Key referencing the Post Topic table)
-
-    """
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=255, blank=True, null=True)
     brand = models.ForeignKey('Brand', on_delete=models.SET_NULL, blank=True,
                               null=True, related_name='brand_post_templates')
