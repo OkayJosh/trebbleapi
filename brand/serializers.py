@@ -12,6 +12,7 @@ class BrandSerializers(ModelSerializer):
             'contact_number', 'website_url', 'numbers_of_daily_post',
         ]
 
+
 class BrandPostTemplateSerializers(ModelSerializer):
     class Meta:
         model = Brand
@@ -19,4 +20,3 @@ class BrandPostTemplateSerializers(ModelSerializer):
             'uuid', 'name', 'brand',
             'header', 'body', 'footer'
         ]
-

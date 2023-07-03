@@ -5,6 +5,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
+from rest_framework.throttling import SimpleRateThrottle
 from rest_framework.views import APIView
 
 from linkedin_oauth2.provider import LinkedInOAuth2Provider
@@ -28,7 +29,6 @@ class LinkedInPostAdapter(PostAdapter, ScheduleMixin):
         self.account = account
         self.access_token = access_token if access_token else self.account.socialtoken_set.first().token
         if access_token and not account:
-            # {"elements": [{"handle~": {"emailAddress": "joshuakayode169@gmail.com"}, "handle": "urn:li:emailAddress:8621693302"}], "firstName": {"localized": {"en_US": "joshua"}, "preferredLocale": {"country": "US", "language": "en"}}, "lastName": {"localized": {"en_US": "Olatunji"}, "preferredLocale": {"country": "US", "language": "en"}}, "id": "xgLGs07jZ7"}
             self.account = SocialAccount.objects.filter(extra_data__access_token=access_token)
 
     def post_async(self, message, scheduled_time=None, handler=None, image_url=None):
@@ -121,7 +121,7 @@ class LinkedInPostAdapter(PostAdapter, ScheduleMixin):
         return complete_response.json()['value']['id']
 
 
-class LinkedInPostView(LoginRequiredMixin, APIView):
+class LinkedInPostView(SimpleRateThrottle, LoginRequiredMixin, APIView):
     serializer_class = PostSerializer
     adapter = LinkedInPostAdapter
 
@@ -140,7 +140,7 @@ class LinkedInPostView(LoginRequiredMixin, APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ListPost(ListAPIView):
+class ListPost(LoginRequiredMixin, ListAPIView):
     serializer_class = SocialPostSerializers
     lookup_field = 'uuid'
 

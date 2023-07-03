@@ -2,6 +2,11 @@ import os
 
 from langchain import OpenAI
 
+from dotenv import dotenv_values
+
+
+# Load the environment variables from .env
+env_vars = dotenv_values('.env')
 
 class PromptTemplate:
     def __init__(self, brand, template):
@@ -24,7 +29,7 @@ class PromptTemplate:
 
 class OpenAIPromptEngine:
     def __init__(self, template: PromptTemplate):
-        self.llm = OpenAI(temperature=0.9, openai_api_key=os.environ['open_api_key'])
+        self.llm = OpenAI(temperature=0.9, openai_api_key=env_vars['OPENAI_KEY'])
         self.template = template
 
     @property
