@@ -3,14 +3,14 @@ from copy import copy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.throttling import SimpleRateThrottle
 from rest_framework.views import APIView
 
 from contentgen.serializers import ContentGeneratorSerializer
 from contentgen.templates import OpenAIPromptEngine, PromptTemplate
+from trebbleapi.throttles import CustomThrottle
 
 
-class ContentGeneratorView(SimpleRateThrottle, LoginRequiredMixin, APIView):
+class ContentGeneratorView(CustomThrottle, LoginRequiredMixin, APIView):
     serializer_class = ContentGeneratorSerializer
     template = PromptTemplate
     engine = OpenAIPromptEngine
