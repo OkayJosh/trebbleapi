@@ -15,8 +15,8 @@ class PromptTemplate:
 
     @property
     def prompt_context(self):
-        return f"Company name is {self.brand.business.name} with a brand name of {self.brand.name}, ' \
-                         'we describe ourself as {self.brand.business.description}, {self.brand.description}. ' \
+        return f"Brand name of {self.brand.name}, ' \
+                         'we describe ourself as {self.brand.description}. ' \
                          'We have a product or service of {self.brand.product_description} ' \
                          'write a post for engagement"
                          # 'write a post of engagement {self._include_latest_news()}"
