@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
+    'treblle',
     'brand',
     'contentgen',
     'linkedin_oauth2',
@@ -46,9 +47,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # third party middleware
+    'treblle.middleware.TreblleMiddleware',
 ]
 
 ROOT_URLCONF = 'trebbleapi.urls'
+
+TREBLLE_INFO = {
+    'api_key': env_vars['TREBLLE_API_KEY'],
+    'project_id': env_vars['TREBLLE_PROJECT_ID']
+}
 
 TEMPLATES = [
     {
