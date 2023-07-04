@@ -27,6 +27,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'brand',
     'contentgen',
     'linkedin_oauth2',
@@ -49,7 +52,7 @@ ROOT_URLCONF = 'trebbleapi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates', ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,8 +138,8 @@ SOCIALACCOUNT_PROVIDERS = {
             'picture-url',
             'public-profile-url',
         ],
-        'CLIENT_ID': '7708o3jqc8dbh4',
-        'SECRET': 'qISoGbQgPLUPBui5',
+        'CLIENT_ID': env_vars['LINKEDIN_CLIENT_ID'],
+        'SECRET': env_vars['LINKEDIN_SECRET'],
         'VERIFIED_EMAIL': True,
         'AUTH_PARAMS': {'access_type': 'offline'},
     }
