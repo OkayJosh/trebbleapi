@@ -10,12 +10,10 @@ class ContentGeneratorSerializer(serializers.Serializer):
 
     def __init__(self, *args, **kwargs):
         super(ContentGeneratorSerializer, self).__init__(*args, **kwargs)
-        print(self.context, 'self.context')
         self.user = self.context['request'].user
-        self.business = self.context['request'].business
 
     def get_brand_choices(self):
-        brands = self.business.brand_businesses.all()
+        brands = self.user.user_brands.all()
         return [(brand.name.upper(), brand.name) for brand in brands]
 
     def get_template_choices(self, brand_name):
