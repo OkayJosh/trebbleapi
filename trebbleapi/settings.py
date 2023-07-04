@@ -49,8 +49,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'trebbleapi.urls'
 
 TREBLLE_INFO = {
-'api_key': os.environ.get('TREBLLE_API_KEY'),
-'project_id': os.environ.get('TREBLLE_PROJECT_ID')
+'api_key': en_vars['TREBLLE_API_KEY'],
+'project_id': en_vars['TREBLLE_PROJECT_ID']
 }
 
 TEMPLATES = [
