@@ -1,6 +1,9 @@
 import uuid as uuid
+
+from django.conf import settings
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
+
 
 
 def brand_directory_path(instance, filename):
@@ -10,6 +13,10 @@ def brand_directory_path(instance, filename):
 
 class Brand(TimeStampedModel):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.SET_NULL,
+                             related_name='user_brands',
+                             null=True, blank=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     logo = models.FileField(upload_to=brand_directory_path)
     description = models.CharField(max_length=255, blank=True, null=True)
