@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
+    'rest_framework.authtoken',
     'treblle',
     'brand',
     'contentgen',
@@ -190,6 +191,7 @@ SOCIALACCOUNT_TOKEN_EXPIRY = int(env_vars['SOCIALACCOUNT_TOKEN_EXPIRY'])
 SOCIALACCOUNT_STORE_TOKENS = bool(env_vars['SOCIALACCOUNT_STORE_TOKENS'])
 ACCOUNT_EMAIL_REQUIRED = bool(env_vars['ACCOUNT_EMAIL_REQUIRED'])
 SOCIALACCOUNT_QUERY_EMAIL = ACCOUNT_EMAIL_REQUIRED
+AUTHENTICATED_LOGIN_REDIRECTS = env_vars['AUTHENTICATED_LOGIN_REDIRECTS']
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
