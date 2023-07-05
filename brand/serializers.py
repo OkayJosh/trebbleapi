@@ -7,7 +7,7 @@ class BrandSerializers(ModelSerializer):
     class Meta:
         model = Brand
         fields = [
-            'name', 'logo',
+            'uuid', 'name', 'logo', 'user',
             'description', 'product_description',
             'contact_number', 'website_url', 'numbers_of_daily_post',
         ]
@@ -17,6 +17,6 @@ class BrandPostTemplateSerializers(ModelSerializer):
     class Meta:
         model = BrandPostTemplate
         fields = [
-            'name', 'brand',
+            'uuid', 'name', 'brand',
             'header', 'body', 'footer'
         ]
