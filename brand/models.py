@@ -18,7 +18,7 @@ class Brand(TimeStampedModel):
                              related_name='user_brands',
                              null=True, blank=True)
     name = models.CharField(max_length=255, blank=True, null=True)
-    logo = models.FileField(upload_to=brand_directory_path)
+    logo = models.FileField(upload_to=brand_directory_path, blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
     product_description = models.CharField(max_length=255, blank=True, null=True)
     website_url = models.URLField(blank=True, null=True)
