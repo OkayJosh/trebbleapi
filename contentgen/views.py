@@ -22,7 +22,7 @@ class ContentGeneratorView(CustomThrottle, APIView):
         serializer = self.serializer_class(data=request.data, context={'request': self.request})
         if serializer.is_valid():
             data = copy(serializer.validated_data)
-            data.pop('number')
+            data.pop('uuid')
             template = self.template(**data)
             engine = self.engine(template=template)
             return Response(engine.stream(), status=status.HTTP_200_OK)
