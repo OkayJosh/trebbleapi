@@ -53,6 +53,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'trebbleapi.urls'
 
+
 TREBLLE_INFO = {
     'api_key': env_vars['TREBLLE_API_KEY'],
     'project_id': env_vars['TREBLLE_PROJECT_ID']
@@ -132,6 +133,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_BROKER_URL = env_vars['CELERY_BROKER_URL']
 CELERY_RESULT_BACKEND = env_vars['CELERY_RESULT_BACKEND']
 
+CELERY_BROKER_URL = ""
+CELERY_RESULT_BACKEND = ""
+
 SOCIALACCOUNT_PROVIDERS = {
     'linkedin': {
         'SCOPE': [
@@ -197,4 +201,3 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-
