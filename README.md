@@ -6,7 +6,8 @@ _This repository contains the submission for the Trebble Hackathon._
 
 [Please refer to the API documentation for detailed information about the endpoints and how to use them.](https://documenter.getpostman.com/view/22833562/2s93zFVyTM)
 
-_In the above link, authenticate with your linkedin using oauth2 to authenticate with your linkedin account_
+_In the above link, authenticate with your linkedin using oauth2 to authenticate with your linkedin account
+the start automating content creation and scheduling for linkedin_
 
 ### Set up
 
