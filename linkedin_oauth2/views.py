@@ -69,6 +69,7 @@ class LinkedInOAuth2APIView(APIView):
     def get(self, request):
         # Get the authorization code from the request query parameters
         access_token = request.headers.get('Authorization', None)
+        access_token = access_token.split(' ')[1]
         # Make an API request using the access token
         headers = {"Authorization": f"Bearer {access_token}"}
         profile_response = requests.get(self.profile_url, headers=headers)
