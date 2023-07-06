@@ -4,7 +4,7 @@ from brand.models import Brand
 
 
 class ContentGeneratorSerializer(serializers.Serializer):
-    number = serializers.IntegerField(default=1)
+    uuid = serializers.UUIDField()
     brand = serializers.CharField()
     template = serializers.CharField()
 
@@ -17,7 +17,7 @@ class ContentGeneratorSerializer(serializers.Serializer):
         return [(brand.name.upper(), brand.name) for brand in brands]
 
     def get_template_choices(self, brand_name):
-        brand = Brand.objects.filter(name=brand_name).first()
+        brand = Brand.objects.get(name=brand_name).first()
         if brand:
             templates = brand.brand_post_templates.all()
             return [(template.name.upper(), template.name) for template in templates]
@@ -30,9 +30,9 @@ class ContentGeneratorSerializer(serializers.Serializer):
         return brand
 
     def validate_template(self, value):
-        brand_name = self.initial_data.get('brand')
-        if brand_name:
-            brand = Brand.objects.filter(name=brand_name).first()
+        uuid = self.initial_data.get('uuid')
+        if uuid:
+            brand = Brand.objects.filter(uuid=uuid).first()
             if brand:
                 template = brand.brand_post_templates.filter(name=value).first()
                 if not template:

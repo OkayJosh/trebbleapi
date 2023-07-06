@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
+    'rest_framework.authtoken',
+    'django_extensions',
     'treblle',
     'brand',
     'contentgen',
@@ -194,6 +196,7 @@ SOCIALACCOUNT_TOKEN_EXPIRY = int(env_vars['SOCIALACCOUNT_TOKEN_EXPIRY'])
 SOCIALACCOUNT_STORE_TOKENS = bool(env_vars['SOCIALACCOUNT_STORE_TOKENS'])
 ACCOUNT_EMAIL_REQUIRED = bool(env_vars['ACCOUNT_EMAIL_REQUIRED'])
 SOCIALACCOUNT_QUERY_EMAIL = ACCOUNT_EMAIL_REQUIRED
+AUTHENTICATED_LOGIN_REDIRECTS = env_vars['AUTHENTICATED_LOGIN_REDIRECTS']
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -201,3 +204,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+

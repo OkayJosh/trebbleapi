@@ -1,11 +1,11 @@
 import requests
 from allauth.socialaccount.models import SocialAccount
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.throttling import SimpleRateThrottle
 from rest_framework.views import APIView
 
 from linkedin_oauth2.provider import LinkedInOAuth2Provider
@@ -13,6 +13,7 @@ from socials.adapters import PostAdapter
 from socials.mixins import ScheduleMixin
 from socials.models import SocialPost
 from socials.serializers import PostSerializer, SocialPostSerializers
+from trebbleapi.throttles import CustomThrottle
 
 
 class LinkedInPostAdapter(PostAdapter, ScheduleMixin):
@@ -32,11 +33,12 @@ class LinkedInPostAdapter(PostAdapter, ScheduleMixin):
             self.account = SocialAccount.objects.filter(extra_data__access_token=access_token)
 
     def post_async(self, message, scheduled_time=None, handler=None, image_url=None):
+        post_db_sync = SocialPost.objects.create(content=message, date_published=scheduled_time or timezone.now(),
+                                                 file=image_url, account=self.account)
         if scheduled_time:
-            self.schedule_post(scheduled_time)
+            self.schedule_post(access_token=self.access_token,
+                               scheduled_time=scheduled_time, post_db_sync_id=post_db_sync.uuid)
         else:
-            post_db_sync = SocialPost.objects.create(content=message, date_published=scheduled_time or timezone.now(),
-                                                     file=image_url, account=self.account)
             self.post(message=message, handler=handler, image_url=image_url, post_db_sync_id=post_db_sync.uuid)
         return 'Submitted'
 
@@ -81,6 +83,7 @@ class LinkedInPostAdapter(PostAdapter, ScheduleMixin):
         post = SocialPost.objects.get(uuid=post_db_sync_id)
         post.response = response.json()
         post.published = True
+        post.date_published = timezone.now()
         post.save()
         return response
 
@@ -121,7 +124,9 @@ class LinkedInPostAdapter(PostAdapter, ScheduleMixin):
         return complete_response.json()['value']['id']
 
 
-class LinkedInPostView(SimpleRateThrottle, LoginRequiredMixin, APIView):
+class LinkedInPostView(CustomThrottle, APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
     adapter = LinkedInPostAdapter
 
@@ -129,20 +134,20 @@ class LinkedInPostView(SimpleRateThrottle, LoginRequiredMixin, APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             adapter = self.adapter()
-            adapter.authenticate(account=serializer.validated_data['account'])
-            scheduled_time = request.data.get('scheduled_time', None)
-            # if scheduled_time is not None:
-
+            adapter.authenticate(account=serializer.validated_data['account_uid'])
+            # if not serializer.validated_data['scheduled_time']:
             adapter_response = adapter.post_async(message=serializer.validated_data['message'],
-                                                  scheduled_time=scheduled_time,
+                                                  scheduled_time=serializer.validated_data.get('scheduled_time', None),
                                                   image_url=serializer.save())
             return Response({'message': 'Post successful', 'response': adapter_response}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ListPost(LoginRequiredMixin, ListAPIView):
+class ListPost(CustomThrottle, ListAPIView):
     serializer_class = SocialPostSerializers
     lookup_field = 'uuid'
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return SocialPost.objects.filter(account__user=self.request.user)
